@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+		 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	</head>
+	<body>
+	<div style="height:500px;width:800px">
+		<label id="display">Messages : </label>
+		</div>
+		<input type="text" width="200px" id="new_message"/>
+		<button type="submit" id="submit">SEND</button>
+	</body>
+
+	<script>
+		var socket = io.connect('http://localhost:8080');
+
+		var username=prompt("Username ?");
+
+		socket.emit('username',username);
+
+		$('#submit').click(function(){
+			socket.emit('messages',$('#new_message').val());
+			$('#new_message')[0].value="";
+		});
+
+		socket.on('message',function(data){
+			$('#display').append('<p>'+data.username+' : '+data.message+'</p>');
+		});
+
+	</script>
+</html>
